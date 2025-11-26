@@ -165,21 +165,21 @@ function calcularNotaNecesaria() {
   let cursosConNotaSimulada = [];
   
   cursos.forEach(curso => {
-    if (curso.fijo && curso.nota !== null && curso.nota !== undefined) {
-      // Cursos ya cursados (fijos)
-      creditosFijos += curso.creditos;
-      notasPonderadasFijas += curso.nota * curso.creditos;
-    } else if (!curso.fijo && curso.nota !== null && curso.nota !== undefined) {
-      // Cursos con nota simulada
-      creditosSimulados += curso.creditos;
-      notasPonderadasSimuladas += curso.nota * curso.creditos;
-      cursosConNotaSimulada.push(curso);
-    } else {
-      // Cursos sin nota (null o undefined)
-      creditosSinNota += curso.creditos;
-      cursosSinNota.push(curso);
-    }
-  });
+  if (curso.fijo && curso.nota !== null && curso.nota !== undefined) {
+    // Cursos ya cursados (fijos) - NO SE PUEDEN CAMBIAR
+    creditosFijos += curso.creditos;
+    notasPonderadasFijas += curso.nota * curso.creditos;
+  } else if (!curso.fijo && curso.nota !== null && curso.nota !== undefined) {
+    // Cursos con nota simulada - SE PUEDEN MEJORAR
+    creditosSimulados += curso.creditos;
+    notasPonderadasSimuladas += curso.nota * curso.creditos;
+    cursosConNotaSimulada.push(curso);
+  } else if (!curso.fijo) {
+    // Cursos sin nota (null o undefined) - PENDIENTES
+    creditosSinNota += curso.creditos;
+    cursosSinNota.push(curso);
+  }
+});
   
   const totalCreditos = creditosFijos + creditosSimulados + creditosSinNota;
   const creditosConNota = creditosFijos + creditosSimulados;
@@ -190,90 +190,94 @@ function calcularNotaNecesaria() {
   
   const ppSimuladoActualSinRedondear = creditosConNota > 0 ? notasPonderadasConNota / creditosConNota : 0;
   const ppSimuladoActual = redondearNota(ppSimuladoActualSinRedondear);
-  
-  // Calcular PPG máximo posible (asumiendo 20 en todos los cursos restantes)
-  const ppMaximoAlcanzableSinRedondear = creditosSinNota > 0 
-    ? (notasPonderadasConNota + (20 * creditosSinNota)) / totalCreditos
-    : ppSimuladoActual;
-  const ppMaximoAlcanzable = redondearNota(ppMaximoAlcanzableSinRedondear);
-  
-  const calculoResultado = document.getElementById("calculoResultado");
-  
-  // CASO CRÍTICO: Verificar primero si es TOTALMENTE imposible
-  const esTotalmenteImposible = ppMaximoAlcanzable < ppObjetivo;
+// Calcular PPG máximo posible (asumiendo 20 en todos los cursos restantes)
+const ppMaximoAlcanzableSinRedondear = creditosSinNota > 0 
+  ? (notasPonderadasConNota + (20 * creditosSinNota)) / totalCreditos
+  : ppSimuladoActual;
+const ppMaximoAlcanzable = redondearNota(ppMaximoAlcanzableSinRedondear);
+
+// NUEVO: Calcular PPG máximo si mejoramos TODOS los cursos (fijos + simulados a 20)
+const ppMaximoAbsolutoSinRedondear = creditosSinNota > 0
+  ? (notasPonderadasFijas + (20 * (creditosSimulados + creditosSinNota))) / totalCreditos
+  : (notasPonderadasFijas + (20 * creditosSimulados)) / totalCreditos;
+const ppMaximoAbsoluto = redondearNota(ppMaximoAbsolutoSinRedondear);
+
+const calculoResultado = document.getElementById("calculoResultado");
+
+// CASO CRÍTICO: Verificar si es TOTALMENTE imposible (ni mejorando todas las notas simuladas)
+const esTotalmenteImposible = ppMaximoAbsoluto < ppObjetivo;
   
   if (esTotalmenteImposible) {
-    // CASO EXTREMO: Ni sacando 20 en todo alcanza el objetivo
-    calculoResultado.innerHTML = `
-      <div class="resultado-box inalcanzable">
-        <div class="resultado-principal">
-          <h3>🚫 Objetivo imposible este ciclo</h3>
-          <p style="font-size: 1.2rem; margin: 15px 0; color: #f44336;">
-            <strong>Incluso sacando 20</strong> en todos los cursos restantes, 
-            el máximo PPG alcanzable es <strong>${ppMaximoAlcanzable.toFixed(2)}</strong>
-          </p>
-          <p style="font-size: 1.1rem; margin: 15px 0;">
-            Tu objetivo de <strong>${ppObjetivo.toFixed(2)}</strong> es <strong>${(ppObjetivo - ppMaximoAlcanzable).toFixed(2)} puntos</strong> 
-            más alto que lo matemáticamente posible.
-          </p>
+  // CASO EXTREMO: Ni sacando 20 en todo (incluyendo mejora de simulados) alcanza el objetivo
+  calculoResultado.innerHTML = `
+    <div class="resultado-box inalcanzable">
+      <div class="resultado-principal">
+        <h3>🚫 Objetivo imposible este ciclo</h3>
+        <p style="font-size: 1.2rem; margin: 15px 0; color: #f44336;">
+          <strong>Incluso sacando 20</strong> en todos los cursos (mejorando las notas simuladas y sacando 20 en los pendientes), 
+          el máximo PPG alcanzable es <strong>${ppMaximoAbsoluto.toFixed(2)}</strong>
+        </p>
+        <p style="font-size: 1.1rem; margin: 15px 0;">
+          Tu objetivo de <strong>${ppObjetivo.toFixed(2)}</strong> es <strong>${(ppObjetivo - ppMaximoAbsoluto).toFixed(2)} puntos</strong> 
+          más alto que lo matemáticamente posible.
+        </p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="numero" style="color: #f44336;">${ppObjetivo.toFixed(2)}</span>
+          <span class="label">Tu Objetivo</span>
         </div>
-        
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="numero" style="color: #f44336;">${ppObjetivo.toFixed(2)}</span>
-            <span class="label">Tu Objetivo</span>
-          </div>
-          <div class="stat-card">
-            <span class="numero" style="color: #FF9800;">${ppMaximoAlcanzable.toFixed(2)}</span>
-            <span class="label">Máximo Posible</span>
-          </div>
-          <div class="stat-card">
-            <span class="numero" style="color: #f44336;">${(ppObjetivo - ppMaximoAlcanzable).toFixed(2)}</span>
-            <span class="label">Diferencia</span>
-          </div>
+        <div class="stat-card">
+          <span class="numero" style="color: #FF9800;">${ppMaximoAbsoluto.toFixed(2)}</span>
+          <span class="label">Máximo Posible</span>
         </div>
-        
-        <div style="background: rgba(244, 67, 54, 0.1); border: 2px solid #f44336; border-radius: 10px; padding: 20px; margin: 20px 0;">
-          <h4 style="color: #f44336; margin-bottom: 15px;">⚠️ Situación actual:</h4>
-          <p style="line-height: 1.8; color: #e0e0e0;">
-            Las notas de los cursos ya cursados han determinado que <strong>no es posible</strong> 
-            alcanzar un PPG de ${ppObjetivo.toFixed(2)} en este ciclo académico, sin importar 
-            qué tan altas sean las notas en los cursos restantes.
-          </p>
-        </div>
-        
-        <div class="estrategia-section">
-          <h4>💪 Enfócate en el futuro:</h4>
-          <ul class="consejos-list">
-            <li><strong>Este ciclo:</strong> Da lo mejor en los cursos restantes para alcanzar el PPG máximo (${ppMaximoAlcanzable.toFixed(2)})</li>
-            <li><strong>Próximo ciclo:</strong> Parte desde un mejor promedio base y establece objetivos alcanzables</li>
-            <li><strong>Largo plazo:</strong> Cada ciclo es una oportunidad para mejorar tu promedio acumulado</li>
-            <li><strong>Perspectiva:</strong> No te desanimes, el camino académico es largo y tienes tiempo de recuperarte</li>
-          </ul>
-        </div>
-        
-        <div class="estrategia-section">
-          <h4>🎯 Recomendaciones prácticas:</h4>
-          <ul class="consejos-list">
-            <li>Establece un objetivo realista de <strong>${ppMaximoAlcanzable.toFixed(2)}</strong> para este ciclo</li>
-            <li>Aprovecha tutorías y recursos académicos disponibles</li>
-            <li>Identifica cursos difíciles y busca apoyo temprano</li>
-            <li>Considera ajustar tu carga académica en el próximo ciclo si es necesario</li>
-            <li>Habla con tu asesor académico sobre estrategias de recuperación</li>
-          </ul>
-        </div>
-        
-        <div style="background: rgba(33, 150, 243, 0.1); border-radius: 10px; padding: 20px; margin-top: 20px; text-align: center;">
-          <p style="font-size: 1.1rem; color: #2196F3; margin: 0;">
-            💡 <strong>Recuerda:</strong> El éxito académico no se mide solo en un ciclo. 
-            ¡Cada semestre es una nueva oportunidad!
-          </p>
+        <div class="stat-card">
+          <span class="numero" style="color: #f44336;">${(ppObjetivo - ppMaximoAbsoluto).toFixed(2)}</span>
+          <span class="label">Diferencia</span>
         </div>
       </div>
-    `;
-    return;
-  }
-  
+      
+      <div style="background: rgba(244, 67, 54, 0.1); border: 2px solid #f44336; border-radius: 10px; padding: 20px; margin: 20px 0;">
+        <h4 style="color: #f44336; margin-bottom: 15px;">⚠️ Situación actual:</h4>
+        <p style="line-height: 1.8; color: #e0e0e0;">
+          Las notas de los cursos ya cursados (fijos) han determinado que <strong>no es posible</strong> 
+          alcanzar un PPG de ${ppObjetivo.toFixed(2)} en este ciclo académico, sin importar 
+          qué tan altas sean las notas en los cursos restantes.
+        </p>
+      </div>
+      
+      <div class="estrategia-section">
+        <h4>💪 Enfócate en el futuro:</h4>
+        <ul class="consejos-list">
+          <li><strong>Este ciclo:</strong> Da lo mejor en los cursos para alcanzar el PPG máximo (${ppMaximoAbsoluto.toFixed(2)})</li>
+          <li><strong>Próximo ciclo:</strong> Parte desde un mejor promedio base y establece objetivos alcanzables</li>
+          <li><strong>Largo plazo:</strong> Cada ciclo es una oportunidad para mejorar tu promedio acumulado</li>
+          <li><strong>Perspectiva:</strong> No te desanimes, el camino académico es largo y tienes tiempo de recuperarte</li>
+        </ul>
+      </div>
+      
+      <div class="estrategia-section">
+        <h4>🎯 Recomendaciones prácticas:</h4>
+        <ul class="consejos-list">
+          <li>Establece un objetivo realista de <strong>${ppMaximoAbsoluto.toFixed(2)}</strong> para este ciclo</li>
+          <li>Aprovecha tutorías y recursos académicos disponibles</li>
+          <li>Identifica cursos difíciles y busca apoyo temprano</li>
+          <li>Considera ajustar tu carga académica en el próximo ciclo si es necesario</li>
+          <li>Habla con tu asesor académico sobre estrategias de recuperación</li>
+        </ul>
+      </div>
+      
+      <div style="background: rgba(33, 150, 243, 0.1); border-radius: 10px; padding: 20px; margin-top: 20px; text-align: center;">
+        <p style="font-size: 1.1rem; color: #2196F3; margin: 0;">
+          💡 <strong>Recuerda:</strong> El éxito académico no se mide solo en un ciclo. 
+          ¡Cada semestre es una nueva oportunidad!
+        </p>
+      </div>
+    </div>
+  `;
+  return;
+}
   // CASO 1: Si ya alcanzó el objetivo con las notas simuladas
   if (creditosSinNota === 0 && ppSimuladoActual >= ppObjetivo) {
     calculoResultado.innerHTML = `
@@ -617,8 +621,6 @@ function calcularNotaNecesaria() {
         becasLista.appendChild(becaExcelencia);
       }
 
-      // CÓDIGO QR para estudiantes con buen rendimiento (PPG >= 14)
-    // CÓDIGO QR para estudiantes con buen rendimiento (PPG >= 14)
 if (ppg >= 14) {
   let qrSection = document.createElement("div");
   qrSection.classList.add("qr-container");
@@ -633,6 +635,8 @@ if (ppg >= 14) {
   `;
   becasLista.appendChild(qrSection);
 }
+
+
 
       // Beca socioeconómica
       let becaSocio = document.createElement("div");
