@@ -626,7 +626,7 @@ if (ppg >= 14) {
     <h3>🎓 Acceso a Talleres y Cursos Gratuitos</h3>
     <p>¡Felicidades! Tu buen rendimiento académico te permite acceder a talleres exclusivos.</p>
     <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin + 'talleres.html')}" alt="Código QR">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin + '/talleres.html')}" alt="Código QR">
     </div>
     <p class="qr-info">📱 Escanea este código QR para registrarte en talleres y cursos gratuitos de la universidad.</p>
     <small style="display:block; margin-top:10px;">Talleres disponibles: GameLab, Desarrollo Web Avanzado, Inteligencia Artificial, Ciberseguridad y más.</small>
