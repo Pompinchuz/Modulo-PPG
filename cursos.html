@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cursos Matriculados — Interfaz</title>
+  <style>
+    :root{
+      --grad1:#ff6a6a;
+      --grad2:#ff4b4b;
+      --muted:#f1f5f9;
+      --card:#ffffff;
+      --text:#222;
+      --accent:#ff4b4b;
+      --header-bg: linear-gradient(90deg, var(--grad1), var(--grad2));
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:#eef3f6;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ===== HEADER ===== */
+    .header{
+      background: var(--header-bg);
+      color:white;
+      padding: 14px 16px 18px;
+    }
+    .header-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    /* left: avatar + student code */
+    .left {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .avatar{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background: white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      color: var(--grad2);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+      flex-shrink:0;
+    }
+   
+    .student-meta{
+      display:flex;
+      flex-direction:column;
+      line-height:1;
+    }
+    .student-code{
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:0.4px;
+    }
+    .tiny-icons{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .icon-btn{
+      background: rgba(255,255,255,0.12);
+      border-radius:8px;
+      width:40px;
+      height:40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:none;
+      cursor:pointer;
+      color:white;
+      position:relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .icon-btn svg{ width:20px; height:20px; display:block; fill: white; opacity:0.95; }
+
+    /* notification dot on bell */
+    .icon-btn .badge{
+      position:absolute;
+      right:6px;
+      top:6px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#ffd24d;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
+    }
+
+    /* title row */
+    .header h1{
+      margin:12px 0 0;
+      font-size:28px;
+      font-weight:800;
+      color: white;
+      letter-spacing:0.2px;
+    }
+
+    /* ===== TABS ===== */
+    .tabs{
+      display:flex;
+      background:var(--muted);
+      padding:12px 10px;
+      gap:10px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .tab{
+      padding:10px 14px;
+      border-radius:6px;
+      font-weight:700;
+      color:#6d6d6d;
+    }
+    .tab.active{
+      color:var(--accent);
+      border-bottom:3px solid var(--accent);
+    }
+
+    /* ===== COURSE LIST ===== */
+    .cursos{
+      padding:16px;
+      padding-bottom:120px; 
+    }
+    .curso{
+      background: var(--card);
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow: 0 6px 12px rgba(16,24,40,0.04);
+    }
+    .curso strong{
+      display:block;
+      font-size:16px;
+      color:#1f2937;
+      margin-bottom:6px;
+    }
+    .curso small{
+      display:block;
+      color:#6b7280;
+      font-size:14px;
+    }
+
+    
+    .btn-ppg{
+      width: calc(100% - 32px);
+      margin: 6px 16px 24px;
+      display:block;
+      background: var(--accent);
+      border:none;
+      color:white;
+      padding:12px 14px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:16px;
+      text-align:center;
+      cursor:pointer;
+      box-shadow: 0 8px 18px rgba(255,75,75,0.14);
+    }
+    .btn-ppg:active{ transform:translateY(1px); }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav{
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 14px;
+      background:white;
+      border-radius:12px;
+      box-shadow: 0 12px 30px rgba(16,24,40,0.12);
+      z-index:30;
+    }
+    .nav-item{
+      text-align:center;
+      font-size:12px;
+      color:#4b5563;
+      width:20%;
+    }
+    .nav-item.active{
+      color:var(--accent);
+      font-weight:700;
+    }
+    .plus-btn{
+      background: var(--grad1);
+      color:white;
+      width:44px;
+      height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      font-size:20px;
+      box-shadow: 0 8px 18px rgba(255,105,105,0.14);
+    }
+
+    /* Responsive tweaks */
+    @media(min-width:600px){
+      .header h1{ font-size:30px; }
+      .curso{ padding:18px; }
+      .avatar{ width:52px; height:52px; font-size:22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="left">
+        <div class="avatar" aria-hidden="true">👓</div>
+        <div class="student-meta">
+          <div class="student-code">U22220080</div>
+          <!-- puedes poner aquí más texto pequeño si lo deseas -->
+        </div>
+      </div>
+
+      <div class="tiny-icons" role="toolbar" aria-label="acciones">
+        <!-- Icono: tarjeta / ID -->
+        <button class="icon-btn" title="Mi ficha">
+          <!-- simple SVG id-card -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="11" r="2"></circle>
+            <path d="M12 10h7v2h-7zM12 13h5v2h-5z" fill="white"></path>
+          </svg>
+        </button>
+
+        <!-- Icono: correo -->
+        <button class="icon-btn" title="Mensajes">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 6h16v12H4z" fill="none" stroke="white" stroke-width="1.2"></path>
+            <path d="M4 6l8 6 8-6" fill="none" stroke="white" stroke-width="1.2"></path>
+          </svg>
+        </button>
+
+        <!-- Icono: campana con badge -->
+        <button class="icon-btn" title="Notificaciones" aria-live="polite">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zM18 16v-5a6 6 0 1 0-12 0v5l-2 2h16z" fill="white"></path>
+          </svg>
+          <span class="badge" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <h1>Cursos</h1>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <div class="tab active" role="tab">Matriculados</div>
+    <div class="tab" role="tab">Avance de plan de estudio</div>
+  </div>
+
+  <!-- LISTA DE CURSOS -->
+  <main class="cursos" role="main">
+    <article class="curso" role="article" aria-label="Algoritmos">
+      <strong>Algoritmos</strong>
+      <small>Presencial</small>
+    </article>
+
+    <article class="curso" role="article" aria-label="Base de Datos II">
+      <strong>Base de Datos II</strong>
+      <small>Presencial</small>
+    </article>
+
+    <article class="curso" role="article" aria-label="Redes II">
+      <strong>Redes II</strong>
+      <small>Presencial</small>
+    </article>
+
+    <article class="curso" role="article" aria-label="Teoría de Sistemas">
+      <strong>Teoría de Sistemas</strong>
+      <small>Presencial</small>
+    </article>
+
+    <article class="curso" role="article" aria-label="Ingles IV">
+      <strong>Ingles IV</strong>
+      <small>Presencial</small>
+    </article>
+
+    <article class="curso" role="article" aria-label="Javascript Avanzado">
+        <strong>Javascript Avanzado</strong>
+        <small>Presencial</small>
+      </article>
+
+      <article class="curso" role="article" aria-label="Seguridad informática">
+        <strong>Seguridad informática</strong>
+        <small>Presencial</small>
+      </article>
+
+    <!-- Botón solicitado -->
+    <button class="btn-ppg" id="btnCalcularPPG">Calcular PPG</button>
+
+    
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" role="navigation" aria-label="Menú inferior">
+    <div class="nav-item active">🏠<br>Inicio</div>
+    <div class="nav-item">📅<br>Calendario</div>
+    <div class="nav-item">📚<br>Mis Cursos</div>
+    <div class="nav-item">💲<br>Pagos</div>
+    <div class="nav-item"><span class="plus-btn">+</span></div>
+  </nav>
+
+  
+  <script>
+    document.getElementById('btnCalcularPPG').addEventListener('click', function(){
+      
+      window.location.href = "index.html";
+
+      
+      this.textContent = 'Abriendo simulador...';
+      setTimeout(()=> this.textContent = 'Calcular PPG', 900);
+    });
+  </script>
+</body>
+</html>

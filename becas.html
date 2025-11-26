@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Becas Disponibles</title>
+  <link rel="stylesheet" href="/CalcuHrub/style.css">
+  <style>
+    body {
+      background-color: #121a2b;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1f2940;
+      padding: 15px 20px;
+      border-bottom: 2px solid #FFD700;
+    }
+    .header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #FFD700;
+    }
+    .perfil {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .perfil img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 2px solid #FFD700;
+      object-fit: cover;
+    }
+    .perfil span {
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .beca-card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    .beca-card h2 {
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+    .beca-card ul {
+      margin: 10px 0 20px 20px;
+    }
+    .beneficios {
+      background: #2e2e2e;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    .beneficios h3 {
+      margin-top: 0;
+      color: #4FC3F7;
+    }
+    .back-link, .reglamento-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 16px;
+      background: #2196F3;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .back-link:hover, .reglamento-link:hover {
+      background: #0b7dda;
+    }
+    .buttons-container {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <h1>Información sobre Becas</h1>
+    <div class="perfil">
+      <span>Cod. Est.: <strong>U22220080</strong></span>
+      <img src="/img/user-removebg-preview.png" alt="Foto de perfil">
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Beca por Excelencia -->
+    <div class="beca-card">
+      <h2>📘 Beca por Excelencia</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>No tener sanciones disciplinarias</li><br>
+        <li>No desaprobar ningún curso</li><br>
+        <li>Tener un promedio mayor a 17 aumenta tus posibilidades</li>
+      </ul>
+      <div class="beneficios">
+        <h3>Beneficios</h3>
+        <ul>
+          <li>Descuento del 20% en cada cuota</li><br>
+          <li>Acceso a talleres exclusivos como GameLab</li><br>
+          <li>Fundamental si quieres postular a un intercambio</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Beca Socioeconómica -->
+    <div class="beca-card">
+      <h2>💡 Beca Socioeconómica</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>Estar registrado en SISFOH en situación de pobreza o pobreza extrema</li><br>
+        <li>No desaprobar ningún curso</li><br>
+        <li>Presentar documentos o declaraciones juradas</li><br>
+        <li>Contar con reporte MISENTINEL</li>
+      </ul>
+      <div class="beneficios">
+        <h3>Beneficios</h3>
+        <ul>
+          <li>Descuento desde un 5% hasta un 50%</li><br>
+          <li>Solo requieres no desaprobar ningún curso para mantener dicha beca</li><br>
+          <li>Facilidades de pago</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Beca por Orfandad -->
+    <div class="beca-card">
+      <h2>❤️ Beca por Orfandad</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>Acreditar la condición de orfandad</li><br>
+        <li>No desaprobar ningún curso</li><br>
+        <li>Presentar la documentación requerida</li>
+      </ul>
+      <div class="beneficios">
+        <h3>Beneficios</h3>
+        <ul>
+          <li>Cobertura desde un 50% hasta 80% de pensiones</li><br>
+          <li>Apoyo psicológico y acompañamiento</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Beca Cultura -->
+    <div class="beca-card">
+      <h2>🎭 Beca Cultura</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>Participar en actividades culturales reconocidas por la universidad</li><br>
+        <li>Certificado que garantice que representas a la universidad</li><br>
+        <li>No desaprobar cursos</li>
+      </ul>
+      <div class="beneficios">
+        <h3>Beneficios</h3>
+        <ul>
+          <li>Beca desde 25%</li><br>
+          <li>Acceso a talleres culturales</li><br>
+          <li>Representar a la institución en competencias culturales</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Beca PILA -->
+    <div class="beca-card">
+      <h2>🌍 Beca PILA (Intercambio Internacional)</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>Promedio sobresaliente (mayor a 17)</li><br>
+        <li>No desaprobar ningún curso</li><br>
+        <li>Postular con carta de motivación y plan académico</li>
+      </ul>
+      <div class="beneficios">
+        <h3>Beneficios</h3>
+        <ul>
+          <li>Intercambio en universidades extranjeras</li><br>
+          <li>Exoneración de pagos en la universidad de destino</li><br>
+          <li>Experiencia cultural y académica internacional</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="buttons-container">
+      <button class="back-link" id="Back-simulator">← Volver al simulador</button>
+      <a class="reglamento-link" href="https://portal.utp.edu.pe/inicio/informacion-institucional" target="_blank">📄 Ver Reglamentos de Becas</a>
+    </div>
+  </main>
+</body>
+
+<script>
+  document.getElementById('Back-simulator').addEventListener('click', function() {
+    window.location.href = "index.html";
+  });
+</script>
+</html>

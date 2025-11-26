@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talleres Exclusivos - UTP</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #121a2b 0%, #1f2940 100%);
+      color: white;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .header {
+      background: rgba(31, 41, 64, 0.95);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #4CAF50, #2196F3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      color: #b3b3b3;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .bienvenida {
+      background: rgba(76, 175, 80, 0.1);
+      border: 2px solid #4CAF50;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px 0;
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .filtros {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.btn-filtro {
+  padding: 10px 20px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: rgba(42, 53, 80, 0.8);
+  color: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-filtro:hover {
+  transform: translateY(-2px);
+}
+
+.btn-filtro.active {
+  transform: scale(1.05);
+}
+
+.btn-filtro.todos.active {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  border-color: #4CAF50;
+}
+
+.btn-filtro.ingenieria.active {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  border-color: #2196F3;
+}
+
+.btn-filtro.comunicacion.active {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  border-color: #FF9800;
+}
+
+.btn-filtro.salud.active {
+  background: linear-gradient(135deg, #E91E63, #C2185B);
+  border-color: #E91E63;
+}
+
+.btn-filtro.derecho.active {
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+  border-color: #9C27B0;
+}
+
+.categoria-section.oculto {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .filtros {
+    gap: 10px;
+  }
+  
+  .btn-filtro {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+}
+
+    .bienvenida h2 {
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      margin-bottom: 15px;
+      color: #4CAF50;
+    }
+
+    .bienvenida p {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    .categoria-section {
+      margin: 50px 0;
+    }
+
+    .categoria-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border-left: 5px solid;
+    }
+
+    .categoria-header.ingenieria { border-left-color: #2196F3; }
+    .categoria-header.comunicacion { border-left-color: #FF9800; }
+    .categoria-header.salud { border-left-color: #E91E63; }
+    .categoria-header.derecho { border-left-color: #9C27B0; }
+
+    .categoria-icon {
+      font-size: 2.5rem;
+    }
+
+    .categoria-header h2 {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      margin: 0;
+    }
+
+    .categoria-header.ingenieria h2 { color: #2196F3; }
+    .categoria-header.comunicacion h2 { color: #FF9800; }
+    .categoria-header.salud h2 { color: #E91E63; }
+    .categoria-header.derecho h2 { color: #9C27B0; }
+
+    .talleres-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .taller-card {
+      background: rgba(42, 53, 80, 0.8);
+      border-radius: 15px;
+      padding: 25px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid transparent;
+      animation: fadeInUp 0.6s ease;
+      animation-fill-mode: both;
+    }
+
+    .taller-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+    }
+
+    .taller-card.ingenieria:hover {
+      border-color: #2196F3;
+      box-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
+    }
+
+    .taller-card.comunicacion:hover {
+      border-color: #FF9800;
+      box-shadow: 0 10px 30px rgba(255, 152, 0, 0.3);
+    }
+
+    .taller-card.salud:hover {
+      border-color: #E91E63;
+      box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+    }
+
+    .taller-card.derecho:hover {
+      border-color: #9C27B0;
+      box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
+    }
+
+    .taller-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .taller-card h3 {
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      margin-bottom: 12px;
+    }
+
+    .taller-card.ingenieria h3 { color: #2196F3; }
+    .taller-card.comunicacion h3 { color: #FF9800; }
+    .taller-card.salud h3 { color: #E91E63; }
+    .taller-card.derecho h3 { color: #9C27B0; }
+
+    .taller-card p {
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      line-height: 1.6;
+      color: #b3b3b3;
+      margin-bottom: 15px;
+    }
+
+    .taller-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .taller-info span {
+      font-size: 0.9rem;
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .taller-info span::before {
+      content: "•";
+      font-size: 1.5rem;
+    }
+
+    .taller-card.ingenieria .taller-info span::before { color: #2196F3; }
+    .taller-card.comunicacion .taller-info span::before { color: #FF9800; }
+    .taller-card.salud .taller-info span::before { color: #E91E63; }
+    .taller-card.derecho .taller-info span::before { color: #9C27B0; }
+
+    .btn-inscribirse {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .taller-card.ingenieria .btn-inscribirse {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+    }
+
+    .taller-card.comunicacion .btn-inscribirse {
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+    }
+
+    .taller-card.salud .btn-inscribirse {
+      background: linear-gradient(135deg, #E91E63, #C2185B);
+    }
+
+    .taller-card.derecho .btn-inscribirse {
+      background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+    }
+
+    .btn-inscribirse:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-inscribirse:active {
+      transform: scale(0.98);
+    }
+
+    .requisitos {
+      background: rgba(33, 150, 243, 0.1);
+      border: 2px solid #2196F3;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 40px 0;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .requisitos h2 {
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      margin-bottom: 20px;
+      color: #2196F3;
+      text-align: center;
+    }
+
+    .requisitos ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .requisitos li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .requisitos li:last-child {
+      border-bottom: none;
+    }
+
+    .requisitos li::before {
+      content: "✓";
+      color: #2196F3;
+      font-size: 1.3rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .contacto {
+      background: rgba(255, 193, 7, 0.1);
+      border: 2px solid #FFC107;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 40px 0;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+
+    .contacto h2 {
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      margin-bottom: 15px;
+      color: #FFC107;
+    }
+
+    .contacto p {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      color: #e0e0e0;
+      margin: 10px 0;
+    }
+
+    .contacto a {
+      color: #FFC107;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .contacto a:hover {
+      color: #ffb300;
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+      color: #b3b3b3;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .talleres-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 15px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .bienvenida,
+      .requisitos,
+      .contacto {
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .categoria-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .taller-card {
+        padding: 20px;
+      }
+
+      .taller-icon {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>🎓 Talleres Exclusivos UTP</h1>
+    <p>Programa de Excelencia Académica</p>
+  </header>
+
+  <div class="container">
+    <section class="bienvenida">
+      <h2>¡Felicidades por tu excelente rendimiento académico! 🎉</h2>
+      <p>
+        Has desbloqueado acceso exclusivo a nuestros talleres especializados. 
+        Estos programas están diseñados para estudiantes destacados como tú, 
+        que buscan ampliar sus conocimientos y desarrollar habilidades profesionales avanzadas.
+      </p>
+    </section>
+
+
+    <!-- FILTROS -->
+<div class="filtros">
+  <button class="btn-filtro todos active" onclick="filtrarCategoria('todos')">
+    📚 Todos
+  </button>
+  <button class="btn-filtro ingenieria" onclick="filtrarCategoria('ingenieria')">
+    ⚙️ Ingeniería
+  </button>
+  <button class="btn-filtro comunicacion" onclick="filtrarCategoria('comunicacion')">
+    📱 Comunicación
+  </button>
+  <button class="btn-filtro salud" onclick="filtrarCategoria('salud')">
+    🏥 Salud
+  </button>
+  <button class="btn-filtro derecho" onclick="filtrarCategoria('derecho')">
+    ⚖️ Derecho
+  </button>
+</div>
+
+    <!-- INGENIERÍA -->
+    <section class="categoria-section">
+      <div class="categoria-header ingenieria">
+        <span class="categoria-icon">⚙️</span>
+        <h2>Ingeniería y Tecnología</h2>
+      </div>
+      <div class="talleres-grid">
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">💻</span>
+          <h3>Desarrollo Web Full Stack Avanzado</h3>
+          <p>
+            Domina frameworks modernos como React, Angular y Node.js. 
+            Aprende arquitecturas de microservicios, despliegue en la nube y optimización de rendimiento.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Intermedio-Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Desarrollo Web Full Stack')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">🤖</span>
+          <h3>Inteligencia Artificial & Machine Learning</h3>
+          <p>
+            Explora el fascinante mundo del ML y Deep Learning. 
+            Trabaja con TensorFlow, PyTorch y desarrolla modelos de IA para resolver problemas reales.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 12 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Inteligencia Artificial')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">🔐</span>
+          <h3>Ciberseguridad & Ethical Hacking</h3>
+          <p>
+            Conviértete en un experto en seguridad informática. 
+            Aprende técnicas de pentesting, análisis de vulnerabilidades y protección de infraestructuras.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Intermedio-Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Ciberseguridad')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">☁️</span>
+          <h3>Cloud Computing & DevOps</h3>
+          <p>
+            Domina AWS, Azure y Google Cloud. 
+            Aprende Docker, Kubernetes, CI/CD y automatización de infraestructura como código.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Intermedio-Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Cloud Computing')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">🏗️</span>
+          <h3>BIM y Modelado 3D para Construcción</h3>
+          <p>
+            Aprende Building Information Modeling con Revit y AutoCAD. 
+            Gestiona proyectos de construcción con tecnología de vanguardia.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 9 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('BIM y Modelado 3D')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card ingenieria">
+          <span class="taller-icon">🔌</span>
+          <h3>Internet of Things (IoT) & Automatización</h3>
+          <p>
+            Desarrolla proyectos con Arduino, Raspberry Pi y sensores inteligentes. 
+            Crea sistemas automatizados y dispositivos conectados.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('IoT & Automatización')">Inscribirse</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- COMUNICACIÓN -->
+    <section class="categoria-section">
+      <div class="categoria-header comunicacion">
+        <span class="categoria-icon">📱</span>
+        <h2>Comunicación y Marketing Digital</h2>
+      </div>
+      <div class="talleres-grid">
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">🎬</span>
+          <h3>Producción Audiovisual y Edición Profesional</h3>
+          <p>
+            Domina Adobe Premiere, After Effects y DaVinci Resolve. 
+            Aprende storytelling visual, dirección y post-producción para crear contenido profesional.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Producción Audiovisual')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">📊</span>
+          <h3>Marketing Digital & Growth Hacking</h3>
+          <p>
+            Estrategias de crecimiento digital, SEO/SEM, marketing de contenidos y analítica web. 
+            Aprende a crear campañas efectivas en redes sociales y Google Ads.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 9 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Marketing Digital')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">✍️</span>
+          <h3>Redacción Creativa y Copywriting</h3>
+          <p>
+            Desarrolla habilidades de escritura persuasiva para publicidad, contenido web y branding. 
+            Aprende técnicas de storytelling y narrativa para diferentes medios.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Básico-Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Copywriting')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">🎨</span>
+          <h3>Diseño Gráfico y UX/UI Design</h3>
+          <p>
+            Domina Figma, Adobe XD e Illustrator. 
+            Crea interfaces intuitivas, branding profesional y experiencias de usuario excepcionales.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('UX/UI Design')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">📸</span>
+          <h3>Fotografía Profesional y Retoque Digital</h3>
+          <p>
+            Técnicas avanzadas de fotografía comercial, editorial y publicitaria. 
+            Domina la iluminación, composición y edición con Photoshop y Lightroom.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Fotografía Profesional')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card comunicacion">
+          <span class="taller-icon">🎙️</span>
+          <h3>Podcast & Producción de Audio</h3>
+          <p>
+            Crea y produce podcasts profesionales. 
+            Aprende locución, edición de audio, diseño sonoro y estrategias de distribución.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 7 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Básico-Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Podcast & Audio')">Inscribirse</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- SALUD -->
+    <section class="categoria-section">
+      <div class="categoria-header salud">
+        <span class="categoria-icon">🏥</span>
+        <h2>Ciencias de la Salud</h2>
+      </div>
+      <div class="talleres-grid">
+        <article class="taller-card salud">
+          <span class="taller-icon">🧬</span>
+          <h3>Bioinformática y Análisis de Datos Genómicos</h3>
+          <p>
+            Análisis de secuencias de ADN, proteínas y estudios de genética computacional. 
+            Utiliza herramientas como R, Python y bases de datos biológicas.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Bioinformática')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card salud">
+          <span class="taller-icon">💊</span>
+          <h3>Farmacología Clínica Avanzada</h3>
+          <p>
+            Profundiza en interacciones medicamentosas, farmacogenética y medicina personalizada. 
+            Casos clínicos reales y actualización en nuevos tratamientos.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 9 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Farmacología Clínica')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card salud">
+          <span class="taller-icon">🩺</span>
+          <h3>Telemedicina y Salud Digital</h3>
+          <p>
+            Aplicaciones de tecnología en atención médica remota, diagnóstico digital 
+            y gestión de historias clínicas electrónicas.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Telemedicina')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card salud">
+          <span class="taller-icon">🧠</span>
+          <h3>Neurociencia Aplicada y Neuropsicología</h3>
+          <p>
+            Estudia el funcionamiento cerebral, plasticidad neuronal y técnicas de evaluación cognitiva. 
+            Aplicaciones en rehabilitación y diagnóstico.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 11 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Neurociencia')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card salud">
+          <span class="taller-icon">🏃</span>
+          <h3>Nutrición Deportiva y Alto Rendimiento</h3>
+          <p>
+            Estrategias nutricionales para atletas, suplementación deportiva 
+            y planes alimenticios personalizados basados en evidencia científica.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Intermedio</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Nutrición Deportiva')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card salud">
+          <span class="taller-icon">🔬</span>
+          <h3>Investigación Clínica y Bioestadística</h3>
+          <p>
+            Diseño de estudios clínicos, análisis estadístico de datos médicos 
+            y metodología de investigación aplicada a ciencias de la salud.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Investigación Clínica')">Inscribirse</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- DERECHO -->
+    <section class="categoria-section">
+      <div class="categoria-header derecho">
+        <span class="categoria-icon">⚖️</span>
+        <h2>Derecho y Ciencias Jurídicas</h2>
+      </div>
+      <div class="talleres-grid">
+        <article class="taller-card derecho">
+          <span class="taller-icon">📜</span>
+          <h3>Derecho Digital y Protección de Datos</h3>
+          <p>
+            Marco legal de la era digital, GDPR, protección de datos personales, 
+            delitos informáticos y regulación de plataformas digitales.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 9 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Intermedio-Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Derecho Digital')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card derecho">
+          <span class="taller-icon">💼</span>
+          <h3>Derecho Corporativo y Compliance</h3>
+          <p>
+            Gobierno corporativo, fusiones y adquisiciones, contratos empresariales 
+            y programas de cumplimiento normativo (compliance).
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Derecho Corporativo')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card derecho">
+          <span class="taller-icon">🌍</span>
+          <h3>Derecho Internacional y Comercio Exterior</h3>
+          <p>
+            Tratados internacionales, arbitraje comercial internacional, 
+            OMC y regulación del comercio global.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 11 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Derecho Internacional')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card derecho">
+          <span class="taller-icon">⚡</span>
+          <h3>Litigación Oral y Técnicas de Argumentación</h3>
+          <p>
+            Técnicas avanzadas de oratoria forense, preparación de alegatos, 
+            cross-examination y estrategias de juicio oral.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 8 semanas</span>
+            <span>Modalidad: Presencial</span>
+            <span>Nivel: Intermedio-Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Litigación Oral')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card derecho">
+          <span class="taller-icon">🏛️</span>
+          <h3>Derecho Constitucional Comparado</h3>
+          <p>
+            Análisis de sistemas constitucionales, derechos fundamentales, 
+            jurisdicción constitucional y teoría del derecho.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 10 semanas</span>
+            <span>Modalidad: Virtual</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Derecho Constitucional')">Inscribirse</button>
+        </article>
+
+        <article class="taller-card derecho">
+          <span class="taller-icon">🔍</span>
+          <h3>Derecho Penal Económico y Anticorrupción</h3>
+          <p>
+            Delitos económicos, lavado de activos, corrupción empresarial 
+            y estrategias de investigación financiera.
+          </p>
+          <div class="taller-info">
+            <span>Duración: 9 semanas</span>
+            <span>Modalidad: Híbrida</span>
+            <span>Nivel: Avanzado</span>
+          </div>
+          <button class="btn-inscribirse" onclick="inscribirse('Derecho Penal Económico')">Inscribirse</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="requisitos">
+      <h2>📋 Requisitos de Participación</h2>
+      <ul>
+        <li>Mantener un Promedio Ponderado General (PPG) mayor o igual a 14.00</li>
+        <li>No tener cursos desaprobados en el ciclo actual</li>
+        <li>Asistencia mínima del 80% a las sesiones programadas</li>
+        <li>Completar los proyectos y evaluaciones del taller</li>
+        <li>Compromiso de participación activa y colaborativa</li>
+        <li>Los talleres tienen cupos limitados (máximo 25 estudiantes por grupo)</li>
+      </ul>
+    </section>
+
+    <section class="contacto">
+      <h2>📞 ¿Necesitas más información?</h2>
+      <p>Contacta con el Departamento de Programas Académicos:</p>
+      <p><strong>Email:</strong> <a href="mailto:talleres@utp.edu.pe">talleres@utp.edu.pe</a></p>
+      <p><strong>Teléfono:</strong> <a href="tel:+51016309000">+51 01 630 9000</a></p>
+      <p><strong>WhatsApp:</strong> <a href="https://wa.me/51987654321">+51 987 654 321</a></p>
+      <p><strong>Horario de atención:</strong> Lunes a Viernes, 8:00 AM - 6:00 PM</p>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2025 Universidad Tecnológica del Perú - Todos los derechos reservados</p>
+    <p>Programa de Excelencia Académica</p>
+  </footer>
+
+  <script>
+
+    function filtrarCategoria(categoria) {
+  // Remover clase active de todos los botones
+  document.querySelectorAll('.btn-filtro').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Agregar clase active al botón clickeado
+  document.querySelector(`.btn-filtro.${categoria}`).classList.add('active');
+  
+  // Obtener todas las secciones de categorías
+  const secciones = document.querySelectorAll('.categoria-section');
+  
+  if (categoria === 'todos') {
+    // Mostrar todas las secciones
+    secciones.forEach(seccion => {
+      seccion.classList.remove('oculto');
+    });
+  } else {
+    // Mostrar solo la sección seleccionada
+    secciones.forEach(seccion => {
+      const header = seccion.querySelector('.categoria-header');
+      if (header.classList.contains(categoria)) {
+        seccion.classList.remove('oculto');
+      } else {
+        seccion.classList.add('oculto');
+      }
+    });
+  }
+  
+  // Scroll suave hacia los talleres
+  window.scrollTo({
+    top: document.querySelector('.filtros').offsetTop - 80,
+    behavior: 'smooth'
+  });
+}
+async function inscribirse(nombreTaller) {
+  const confirmacion = confirm(
+    `¿Deseas inscribirte en el taller de ${nombreTaller}?\n\n` +
+    `Recibirás un correo de confirmación con los detalles del taller.`
+  );
+  
+  if (confirmacion) {
+    const botonOriginal = event.target;
+    const textoOriginal = botonOriginal.textContent;
+    botonOriginal.textContent = 'Enviando...';
+    botonOriginal.disabled = true;
+
+    // Datos precargados
+    const nombre = 'Jesus Antonio Huilla Rosillo';
+    const codigo = 'U22220080';
+    const email = 'U22220080@utp.edu.pe';
+
+    try {
+      const formData = {
+        _subject: `🎓 Nueva Inscripción al Taller: ${nombreTaller}`,
+        _template: 'box',
+        
+        // Información del estudiante
+        '👤 Estudiante': nombre,
+        '🎫 Código': codigo,
+        '📧 Correo': email,
+        
+        // Información del taller
+        '📚 Taller Seleccionado': nombreTaller,
+        '📅 Fecha de Inscripción': new Date().toLocaleString('es-PE', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        
+        // Mensaje personalizado
+        '💬 Mensaje': `
+═══════════════════════════════════════════════
+        🎉 NUEVA INSCRIPCIÓN RECIBIDA 🎉
+═══════════════════════════════════════════════
+
+El estudiante ${nombre} se ha inscrito exitosamente 
+al taller de ${nombreTaller}.
+
+📋 DATOS DEL ESTUDIANTE:
+   • Nombre: ${nombre}
+   • Código: ${codigo}
+   • Correo: ${email}
+
+📚 DETALLES DE LA INSCRIPCIÓN:
+   • Taller: ${nombreTaller}
+   • Fecha: ${new Date().toLocaleDateString('es-PE')}
+   • Hora: ${new Date().toLocaleTimeString('es-PE')}
+
+✅ PRÓXIMOS PASOS:
+   1. Verificar disponibilidad de cupos
+   2. Enviar correo de confirmación al estudiante
+   3. Proporcionar material del taller
+   4. Asignar fecha de inicio
+
+═══════════════════════════════════════════════
+Este es un mensaje automático del Sistema de 
+Inscripción de Talleres UTP
+═══════════════════════════════════════════════
+        `
+      };
+
+      const response = await fetch('https://formspree.io/f/xzzqlydo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(
+          `¡Inscripción exitosa! 🎉\n\n` +
+          `Estudiante: ${nombre}\n` +
+          `Código: ${codigo}\n` +
+          `Taller: ${nombreTaller}\n\n` +
+          `Se ha enviado la notificación de inscripción.\n` +
+          `Recibirás un correo de confirmación en las próximas 24 horas.\n\n` +
+          `¡Nos vemos en el taller!`
+        );
+      } else {
+        throw new Error(data.error || 'Error al enviar');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert(
+        `Hubo un error al procesar tu inscripción.\n\n` +
+        `Por favor, contacta a talleres@utp.edu.pe`
+      );
+    } finally {
+      botonOriginal.textContent = textoOriginal;
+      botonOriginal.disabled = false;
+    }
+  }
+}
+
+    // Animación de scroll suave para enlaces internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
